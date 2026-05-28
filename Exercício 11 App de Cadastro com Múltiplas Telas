@@ -1,0 +1,143 @@
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
+
+function CadastroScreen({ navigation }) {
+  const [nome, setNome] = useState('');
+  const [idade, setIdade] = useState('');
+  const [curso, setCurso] = useState('');
+
+  const enviar = () => {
+    navigation.navigate('Perfil', {
+      nome,
+      idade,
+      curso,
+    });
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>Cadastro</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Nome"
+        value={nome}
+        onChangeText={setNome}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Idade"
+        value={idade}
+        onChangeText={setIdade}
+        keyboardType="numeric"
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Curso"
+        value={curso}
+        onChangeText={setCurso}
+      />
+
+      <TouchableOpacity
+        style={styles.botao}
+        onPress={enviar}
+      >
+        <Text style={styles.textoBotao}>
+          Enviar
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+function PerfilScreen({ route }) {
+  const { nome, idade, curso } = route.params;
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>Perfil</Text>
+
+      <Text style={styles.info}>
+        Nome: {nome}
+      </Text>
+
+      <Text style={styles.info}>
+        Idade: {idade}
+      </Text>
+
+      <Text style={styles.info}>
+        Curso: {curso}
+      </Text>
+    </View>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Cadastro"
+          component={CadastroScreen}
+        />
+
+        <Stack.Screen
+          name="Perfil"
+          component={PerfilScreen}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+
+  titulo: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+
+  input: {
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 10,
+  },
+
+  botao: {
+    backgroundColor: '#FFC300',
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+
+  textoBotao: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+
+  info: {
+    fontSize: 20,
+    marginBottom: 10,
+  },
+});
