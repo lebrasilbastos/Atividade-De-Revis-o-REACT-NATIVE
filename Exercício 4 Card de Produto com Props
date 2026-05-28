@@ -1,0 +1,82 @@
+import React from 'react';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
+
+function ProductCard({ title, price, description, inStock }) {
+  return (
+    <View
+      style={[
+        styles.card,
+        !inStock && styles.indisponivel
+      ]}
+    >
+      <Text style={styles.titulo}>{title}</Text>
+      <Text style={styles.preco}>R$ {price}</Text>
+      <Text>{description}</Text>
+
+      <Text style={styles.estoque}>
+        {inStock ? 'Disponível' : 'Indisponível'}
+      </Text>
+    </View>
+  );
+}
+
+export default function App() {
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <ProductCard
+        title="Notebook"
+        price="3500"
+        description="Notebook para estudos"
+        inStock={true}
+      />
+
+      <ProductCard
+        title="Mouse Gamer"
+        price="120"
+        description="Mouse com RGB"
+        inStock={false}
+      />
+
+      <ProductCard
+        title="Teclado Mecânico"
+        price="250"
+        description="Switches azuis"
+        inStock={true}
+      />
+
+      <ProductCard
+        title="Monitor 24''"
+        price="900"
+        description="Monitor Full HD"
+        inStock={false}
+      />
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  card: {
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+  },
+  indisponivel: {
+    opacity: 0.5,
+  },
+  titulo: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  preco: {
+    fontSize: 18,
+    marginVertical: 5,
+  },
+  estoque: {
+    marginTop: 10,
+    fontWeight: 'bold',
+  },
+});
