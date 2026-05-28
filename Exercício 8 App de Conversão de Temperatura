@@ -1,0 +1,112 @@
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+} from 'react-native';
+
+export default function App() {
+  const [celsius, setCelsius] = useState('');
+  const [fahrenheit, setFahrenheit] = useState('');
+  const [erro, setErro] = useState('');
+
+  const converterCelsius = (valor) => {
+    setCelsius(valor);
+
+    if (valor === '') {
+      setFahrenheit('');
+      setErro('');
+      return;
+    }
+
+    if (isNaN(valor)) {
+      setErro('Digite apenas números.');
+      setFahrenheit('');
+      return;
+    }
+
+    const resultado = (parseFloat(valor) * 1.8 + 32).toFixed(1);
+
+    setFahrenheit(resultado);
+    setErro('');
+  };
+
+  const converterFahrenheit = (valor) => {
+    setFahrenheit(valor);
+
+    if (valor === '') {
+      setCelsius('');
+      setErro('');
+      return;
+    }
+
+    if (isNaN(valor)) {
+      setErro('Digite apenas números.');
+      setCelsius('');
+      return;
+    }
+
+    const resultado = ((parseFloat(valor) - 32) / 1.8).toFixed(1);
+
+    setCelsius(resultado);
+    setErro('');
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>
+        Conversor de Temperatura
+      </Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Celsius (°C)"
+        keyboardType="numeric"
+        value={celsius}
+        onChangeText={converterCelsius}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Fahrenheit (°F)"
+        keyboardType="numeric"
+        value={fahrenheit}
+        onChangeText={converterFahrenheit}
+      />
+
+      {erro !== '' && (
+        <Text style={styles.erro}>{erro}</Text>
+      )}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+
+  titulo: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 30,
+  },
+
+  input: {
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 15,
+    fontSize: 18,
+  },
+
+  erro: {
+    color: 'red',
+    textAlign: 'center',
+    fontSize: 16,
+  },
+});
