@@ -1,0 +1,168 @@
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+} from 'react-native';
+
+export default function App() {
+  const [tarefa, setTarefa] = useState('');
+  const [lista, setLista] = useState([]);
+
+  const adicionarTarefa = () => {
+    if (tarefa.trim() === '') return;
+
+    setLista([
+      ...lista,
+      {
+        id: Date.now().toString(),
+        texto: tarefa,
+        concluida: false,
+      },
+    ]);
+
+    setTarefa('');
+  };
+
+  const concluirTarefa = (id) => {
+    setLista(
+      lista.map((item) =>
+        item.id === id
+          ? { ...item, concluida: !item.concluida }
+          : item
+      )
+    );
+  };
+
+  const removerTarefa = (id) => {
+    setLista(lista.filter((item) => item.id !== id));
+  };
+
+  const concluidas = lista.filter(
+    (item) => item.concluida
+  ).length;
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>To-do List</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Digite uma tarefa"
+        value={tarefa}
+        onChangeText={setTarefa}
+      />
+
+      <TouchableOpacity
+        style={styles.botaoAdicionar}
+        onPress={adicionarTarefa}
+      >
+        <Text style={styles.textoBotao}>Adicionar</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.contador}>
+        Concluídas: {concluidas}
+      </Text>
+
+      <FlatList
+        data={lista}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.item}>
+            <Text
+              style={[
+                styles.textoTarefa,
+                item.concluida && styles.concluida,
+              ]}
+            >
+              {item.texto}
+            </Text>
+
+            <View style={styles.botoes}>
+              <TouchableOpacity
+                style={styles.botaoConcluir}
+                onPress={() => concluirTarefa(item.id)}
+              >
+                <Text>✓</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.botaoRemover}
+                onPress={() => removerTarefa(item.id)}
+              >
+                <Text style={{ color: '#fff' }}>X</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    marginTop: 40,
+  },
+  titulo: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
+  },
+  botaoAdicionar: {
+    backgroundColor: '#FFC300',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  textoBotao: {
+    fontWeight: 'bold',
+  },
+  contador: {
+    fontSize: 18,
+    marginBottom: 15,
+  },
+  item: {
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  textoTarefa: {
+    fontSize: 18,
+  },
+  concluida: {
+    textDecorationLine: 'line-through',
+    color: 'gray',
+  },
+  botoes: {
+    flexDirection: 'row',
+  },
+  botaoConcluir: {
+    backgroundColor: '#90EE90',
+    padding: 10,
+    borderRadius: 5,
+    marginRight: 5,
+  },
+  botaoRemover: {
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+  },
+});
