@@ -1,0 +1,183 @@
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+
+export default function App() {
+  const filmes = [
+    {
+      id: '1',
+      nome: 'Interestelar',
+      nota: 9.0,
+      categoria: 'Ficção',
+      imagem: 'https://waltermattos.com/site2/wp-content/uploads/2014/11/tut_Analise_Grafica_Cartaz_Interstellar_05_011.png',
+    },
+    {
+      id: '2',
+      nome: 'OS Vingadores',
+      nota: 8.5,
+      categoria: 'Ação',
+      imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlKyMh3Bn3SAzx_PmS8FHqIPYiC-A245mbA&s',
+    },
+    {
+      id: '3',
+      nome: 'Toy Story',
+      nota: 7.9,
+      categoria: 'Animação',
+      imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd1_9O7ZAMWdim0aZ3AGYpzugvq7EPOdJpHA&s',
+    },
+    {
+      id: '4',
+      nome: 'Titanic',
+      nota: 7.8,
+      categoria: 'Romance',
+      imagem: 'https://upload.wikimedia.org/wikipedia/pt/2/22/Titanic_poster.jpg',
+    },
+    {
+      id: '5',
+      nome: 'Batman: O Cavaleiro das Trevas',
+      nota: 9.1,
+      categoria: 'Ação',
+      imagem: 'https://upload.wikimedia.org/wikipedia/pt/thumb/d/d1/The_Dark_Knight.jpg/250px-The_Dark_Knight.jpg',
+    },
+  ];
+
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState('Todos');
+
+  const filmesFiltrados =
+    categoriaSelecionada === 'Todos'
+      ? filmes
+      : filmes.filter(
+          (filme) => filme.categoria === categoriaSelecionada
+        );
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>Catálogo de Filmes</Text>
+
+      <View style={styles.filtros}>
+        <TouchableOpacity
+          style={styles.botao}
+          onPress={() => setCategoriaSelecionada('Todos')}
+        >
+          <Text>Todos</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.botao}
+          onPress={() => setCategoriaSelecionada('Ação')}
+        >
+          <Text>Ação</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.botao}
+          onPress={() => setCategoriaSelecionada('Ficção')}
+        >
+          <Text>Ficção</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.botao}
+          onPress={() => setCategoriaSelecionada('Animação')}
+        >
+          <Text>Animação</Text>
+        </TouchableOpacity>
+      </View>
+
+      <FlatList
+        data={filmesFiltrados}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View
+            style={[
+              styles.card,
+              item.nota > 8 && styles.destaque,
+            ]}
+          >
+            <Image
+              source={{ uri: item.imagem }}
+              style={styles.imagem}
+            />
+
+            <Text style={styles.nome}>{item.nome}</Text>
+            <Text>Categoria: {item.categoria}</Text>
+            <Text>Nota: {item.nota}</Text>
+
+            {item.nota > 8 && (
+              <Text style={styles.selo}>
+                ⭐ Filme em Destaque
+              </Text>
+            )}
+          </View>
+        )}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 15,
+    marginTop: 30,
+  },
+
+  titulo: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 15,
+  },
+
+  filtros: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginBottom: 15,
+  },
+
+  botao: {
+    backgroundColor: '#FFC300',
+    padding: 10,
+    margin: 5,
+    borderRadius: 8,
+  },
+
+  card: {
+    borderWidth: 1,
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 15,
+    alignItems: 'center',
+  },
+
+  destaque: {
+    borderColor: 'gold',
+    borderWidth: 3,
+  },
+
+  imagem: {
+    width: 270,
+    height: 350, 
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+
+  nome: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+
+  selo: {
+    color: 'goldenrod',
+    fontWeight: 'bold',
+    marginTop: 5,
+  },
+});
