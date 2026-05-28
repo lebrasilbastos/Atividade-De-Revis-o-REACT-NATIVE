@@ -1,0 +1,162 @@
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+
+export default function App() {
+  const [posts, setPosts] = useState([
+    {
+      id: '1',
+      usuario: 'Ana',
+      texto: 'Hoje foi um ótimo dia!',
+      curtidas: 12,
+    },
+    {
+      id: '2',
+      usuario: 'Carlos',
+      texto: 'Aprendendo React Native 🚀',
+      curtidas: 8,
+    },
+    {
+      id: '3',
+      usuario: 'Maria',
+      texto: 'Acabei de assistir um filme incrível.',
+      curtidas: 15,
+    },
+  ]);
+
+  const curtir = (id) => {
+    setPosts(
+      posts.map((post) =>
+        post.id === id
+          ? { ...post, curtidas: post.curtidas + 1 }
+          : post
+      )
+    );
+  };
+
+  const descurtir = (id) => {
+    setPosts(
+      posts.map((post) =>
+        post.id === id && post.curtidas > 0
+          ? { ...post, curtidas: post.curtidas - 1 }
+          : post
+      )
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>
+        Mini Rede Social
+      </Text>
+
+      <FlatList
+        data={posts}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.post}>
+            <Text style={styles.usuario}>
+              @{item.usuario}
+            </Text>
+
+            <Text style={styles.texto}>
+              {item.texto}
+            </Text>
+
+            <Text style={styles.curtidas}>
+              ❤️ {item.curtidas} curtidas
+            </Text>
+
+            <View style={styles.botoes}>
+              <TouchableOpacity
+                style={styles.botaoCurtir}
+                onPress={() => curtir(item.id)}
+              >
+                <Text style={styles.textoBotao}>
+                  Curtir
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.botaoDescurtir}
+                onPress={() => descurtir(item.id)}
+              >
+                <Text style={styles.textoBotao}>
+                  Descurtir
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 15,
+    marginTop: 30,
+  },
+
+  titulo: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+
+  post: {
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+  },
+
+  usuario: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+
+  texto: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+
+  curtidas: {
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+
+  botoes: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
+  botaoCurtir: {
+    backgroundColor: '#90EE90',
+    padding: 10,
+    borderRadius: 8,
+    width: '48%',
+    alignItems: 'center',
+  },
+
+  botaoDescurtir: {
+    backgroundColor: '#FF7F7F',
+    padding: 10,
+    borderRadius: 8,
+    width: '48%',
+    alignItems: 'center',
+  },
+
+  textoBotao: {
+    fontWeight: 'bold',
+  },
+});
