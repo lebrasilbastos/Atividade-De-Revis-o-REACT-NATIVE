@@ -1,0 +1,152 @@
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+} from 'react-native';
+
+export default function App() {
+  const [nome, setNome] = useState('');
+  const [nota, setNota] = useState('');
+  const [alunos, setAlunos] = useState([]);
+
+  const adicionarAluno = () => {
+    if (nome === '' || nota === '') return;
+
+    setAlunos([
+      ...alunos,
+      {
+        id: Date.now().toString(),
+        nome,
+        nota: parseFloat(nota),
+      },
+    ]);
+
+    setNome('');
+    setNota('');
+  };
+
+  const media =
+    alunos.length > 0
+      ? (
+          alunos.reduce((soma, aluno) => soma + aluno.nota, 0) /
+          alunos.length
+        ).toFixed(2)
+      : 0;
+
+  const maiorNota =
+    alunos.length > 0
+      ? Math.max(...alunos.map((aluno) => aluno.nota))
+      : 0;
+
+  const menorNota =
+    alunos.length > 0
+      ? Math.min(...alunos.map((aluno) => aluno.nota))
+      : 0;
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>
+        Sistema de Notas
+      </Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Nome do aluno"
+        value={nome}
+        onChangeText={setNome}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Nota"
+        keyboardType="numeric"
+        value={nota}
+        onChangeText={setNota}
+      />
+
+      <TouchableOpacity
+        style={styles.botao}
+        onPress={adicionarAluno}
+      >
+        <Text style={styles.textoBotao}>
+          Adicionar
+        </Text>
+      </TouchableOpacity>
+
+      <View style={styles.estatisticas}>
+        <Text>Média da turma: {media}</Text>
+        <Text>Maior nota: {maiorNota}</Text>
+        <Text>Menor nota: {menorNota}</Text>
+      </View>
+
+      <FlatList
+        data={alunos}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.aluno}>
+            <Text style={styles.nomeAluno}>
+              {item.nome}
+            </Text>
+            <Text>Nota: {item.nota}</Text>
+          </View>
+        )}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    marginTop: 30,
+  },
+
+  titulo: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+
+  input: {
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 10,
+  },
+
+  botao: {
+    backgroundColor: '#FFC300',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+
+  textoBotao: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+
+  estatisticas: {
+    marginBottom: 20,
+    gap: 5,
+  },
+
+  aluno: {
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 10,
+  },
+
+  nomeAluno: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
