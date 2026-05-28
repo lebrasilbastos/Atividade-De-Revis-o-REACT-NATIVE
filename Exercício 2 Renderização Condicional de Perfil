@@ -1,0 +1,55 @@
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+
+export default function App() {
+  const [mostrarPerfil, setMostrarPerfil] = useState(false);
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.botao}
+        onPress={() => setMostrarPerfil(!mostrarPerfil)}
+      >
+        <Text style={styles.textoBotao}>
+          {mostrarPerfil ? 'Esconder Perfil' : 'Mostrar Perfil'}
+        </Text>
+      </TouchableOpacity>
+
+      {mostrarPerfil && (
+        <View style={styles.perfil}>
+          <Text style={styles.texto}>Nome: Maria Silva</Text>
+          <Text style={styles.texto}>Idade: 16 anos</Text>
+          <Text style={styles.texto}>Curso: Desenvolvimento de Sistemas</Text>
+        </View>
+      )}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  botao: {
+    backgroundColor: '#FFC300',
+    padding: 15,
+    borderRadius: 10,
+  },
+  textoBotao: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  perfil: {
+    marginTop: 20,
+    padding: 15,
+    borderWidth: 1,
+    borderRadius: 10,
+    width: 250,
+  },
+  texto: {
+    fontSize: 18,
+    marginVertical: 5,
+  },
+});
